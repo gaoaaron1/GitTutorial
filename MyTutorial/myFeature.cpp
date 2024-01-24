@@ -10,8 +10,9 @@ int main() {
 
     // You can also print variables
     int num1 = 2;
-    int num2 = 3;
+    int num2 = 4;
     int sum = num1 + num2;
+
     cout << "The value of sum is: " << sum << endl;
 
     return 0;
