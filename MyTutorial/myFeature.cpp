@@ -6,11 +6,13 @@ using namespace std;
 int main() {
 
     // Print a message to the console
-    cout << "Hello, World!" << std::endl;
+
+    cout << "Hello, there World!" << std::endl;
 
     // You can also print variables
     int num1 = 2;
-    int num2 = 4;
+    int num2 = 1;
+
     int sum = num1 + num2;
 
     cout << "The value of sum is: " << sum << endl;
