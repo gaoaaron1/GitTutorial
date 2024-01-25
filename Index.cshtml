@@ -8,15 +8,19 @@
 <h1>All Clients</h1>
 
 <p>
-    <a asp-action="CreateOrEdit" class="btn btn-primary customColorDarkBlue btn-sm col-auto mx-2">Add New Client</a>
-    <a asp-action="ArchiveClient" asp-controller="Client" class="btn btn-primary customColorDarkBlue btn-sm col-auto mx-2">View Archived Clients</a>
+  <a asp-action="CreateOrEdit" class="btn btn-primary customColorDarkBlue btn-sm col-auto mx-2">Add New Client</a>
+
+  
+  <a asp-action="ArchiveClient" asp-controller="Client" class="btn btn-primary customColorDarkBlue btn-sm col-auto mx-2">View Archived Clients</a>
+
+  
+<button id="toggleTableButton" class="btn btn-primary customColorDarkBlue mb-3">Table View</button>
+<button id="toggleCardButton" class="btn btn-primary customColorDarkBlue mb-3">Card View</button>
+
+
 </p>
 
-<button id="toggleViewButton" class="btn btn-primary customColorDarkBlue mb-3">
-    <span id="cardViewIcon" class="fas fa-th" style="display: none;"></span>
-    <span id="tableViewIcon" class="fas fa-table"></span>
-    Toggle View
-</button>
+
 
 <!-- Search input field -->
 <div>
@@ -27,7 +31,150 @@
 
 
 
-<div id="cardView" style=" display: none; margin-top: 20px;">
+
+<!-- Table displaying client information -->
+<div id="tableView">
+    <table class="content-table">
+        <thead>
+            <tr>
+                <td colspan="7">
+                    <div class="row">
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Id)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.ContactName)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Email)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.CellPhone)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Telephone)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Fax)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Address)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.City)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Region)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Country)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.PostalCode)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.Referral)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.ReferralDate)</strong>
+                        </div>
+                        <div class="col px-2">
+                            <strong>@Html.DisplayNameFor(model => model.DateOfLoss)</strong>
+                        </div>
+                        <div class="col px-2">
+
+                            <strong>Action Buttons:</strong>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+
+             @foreach (var item in Model.Where(client => client.Status == "Active"))
+            {
+                <tr>
+                    <td colspan="7" style="border: none;">
+                        <div>
+                            <div>
+
+                                <div class="row">
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.ContactName)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.CellPhone)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Telephone)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Fax)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Address)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.City)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Region)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Country)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.PostalCode)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.Referral)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.ReferralDate)
+                                    </div>
+                                    <div class="col px-2">
+                                        @Html.DisplayFor(modelItem => item.DateOfLoss)
+                                    </div>
+                                    <div class="col px-2">
+
+                                        <!-- Action Buttons -->
+                                    <div class="btn-group" role="group" aria-label="Toolbar with button groups to edit, get details or to set status">
+                                        <a asp-action="CreateOrEdit" asp-route-id="@item.Id" class="btn btn-warning customColorWarning" aria-label="Edit" title="Edit" data-toggle="tooltip" data-placement="top">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info customColorInfo" aria-label="Details" title="Details" data-toggle="tooltip" data-placement="top">
+                                            <i class="fa-solid fa-info"></i>
+                                        </a>
+                                        <button onclick="setInactive('@item.Id')" class="btn btn-danger customColorDanger" aria-label="Set Inactive" title="Set Inactive" data-toggle="tooltip" data-placement="top">
+                                            <i class="fa-regular fa-ban"></i>
+                                        </button>
+                                    </div>
+                        <!-- End of Action Buttons -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+                          
+  </table>
+</div> 
+
+
+
+  
+  
+  <div id="cardView" style=" display: none; margin-top: 20px;">
     <div class="row">
         @foreach (var item in Model.Where(client => client.Status == "Active"))
         {
@@ -67,130 +214,39 @@
     </div>
 </div>
 
-<!-- Table displaying client information -->
-<div id="tableView">
-    <table class="table">
-        <thead>
-            <tr>
-                <td colspan="7">
-                    <div class="row">
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.Id)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.ContactName)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.Email)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.CellPhone)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.Telephone)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.Fax)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.Address)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.City)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.Region)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.Country)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>@Html.DisplayNameFor(model => model.PostalCode)</strong>
-                        </div>
-                        <div class="col px-2">
-                            <strong>Action Buttons:</strong>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-             @foreach (var item in Model.Where(client => client.Status == "Active"))
-            {
-                <tr>
-                    <td colspan="7" style="border: none;">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.ContactName)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.Email)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.CellPhone)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.Telephone)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.Fax)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.Address)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.City)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.Region)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.Country)
-                                    </div>
-                                    <div class="col px-2">
-                                        @Html.DisplayFor(modelItem => item.PostalCode)
-                                    </div>
-                                    <div class="col px-2">
-                                        <!-- Action Buttons -->
-                                    <div class="btn-group" role="group" aria-label="Toolbar with button groups to edit, get details or to set status">
-                                        <a asp-action="CreateOrEdit" asp-route-id="@item.Id" class="btn btn-warning customColorWarning" aria-label="Edit" title="Edit" data-toggle="tooltip" data-placement="top">
-                                            <i class="fa-regular fa-pen-to-square"></i>
-                                        </a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info customColorInfo" aria-label="Details" title="Details" data-toggle="tooltip" data-placement="top">
-                                            <i class="fa-solid fa-info"></i>
-                                        </a>
-                                        <button onclick="setInactive('@item.Id')" class="btn btn-danger customColorDanger" aria-label="Set Inactive" title="Set Inactive" data-toggle="tooltip" data-placement="top">
-                                            <i class="fa-regular fa-ban"></i>
-                                        </button>
-                                    </div>
-                        <!-- End of Action Buttons -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
 
 
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 
-<!-- JavaScript for toggling views -->
-<script src="~/js/toggleView.js"></script>
-<script>
-    ToggleView.init();
-</script>
 
+<!-- JavaScript to toggle views -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Function to toggle card view
+        function toggleCardView() {
+            document.getElementById("cardView").style.display = "block";
+            document.getElementById("tableView").style.display = "none";
+        }
+
+        // Function to toggle table view
+        function toggleTableView() {
+            document.getElementById("cardView").style.display = "none";
+            document.getElementById("tableView").style.display = "block";
+        }
+
+        // Attach click events to the buttons
+        document.getElementById("toggleCardButton").addEventListener("click", toggleCardView);
+        document.getElementById("toggleTableButton").addEventListener("click", toggleTableView);
+
+        toggleTableView();
+    });
+
+</script>
+  
+  
 <!-- JavaScript for setting client status to inactive -->
 <script>
     function setInactive(id) {
@@ -228,4 +284,4 @@
     }
 }
 
-</script>
+</script>  
