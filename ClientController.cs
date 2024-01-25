@@ -162,9 +162,7 @@ namespace InteractHealthProDatabase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> CreateOrEdit(int? id, [Bind("Id,ClientMVA,Appointments,HealthFile,Pet,Dependent,InsuranceClaim,Referral,ReferralDate,DateOfLoss,ContactName,Email,CellPhone,Telephone,Fax,Address,City,Region,Country,PostalCode,Status")] Client client)
-
+        public async Task<IActionResult> CreateOrEdit(int? id, [Bind("Id,ClientMVA,Appointments,HealthFile,Pet,Dependent,InsuranceClaim,Referral,ReferralDate,DateOfLoss,ContactName,Email,CellPhone,Telephone,Fax,Address,City,Region,Country,PostalCode")] Client client)
         {
             // In the Bind annotation above, we have to include the children models, otherwise they will not be included
 
@@ -204,9 +202,6 @@ namespace InteractHealthProDatabase.Controllers
                 }
                 else
                 {
-
-                    client.Status ??= "Active"; 
-
                     _context.Add(client);
 
                     // We have to set the client of the children models, otherwise it will be null
@@ -278,9 +273,7 @@ namespace InteractHealthProDatabase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Edit(int id, [Bind("Id, Pet,Dependent,ClientMVA,Referral,ContactName,Email,CellPhone,Telephone,Fax,Address,City,Region,Country,PostalCode,Status")] Client client)
-
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Pet,Dependent,ClientMVA,Referral,ContactName,Email,CellPhone,Telephone,Fax,Address,City,Region,Country,PostalCode")] Client client)
         {
             if (id != client.Id)
             {
@@ -289,9 +282,6 @@ namespace InteractHealthProDatabase.Controllers
             Console.WriteLine("Running line 64");
             if (ModelState.IsValid)
             {
-
-                client.Status ??= "Active";
-
                 try
                 {
                     _context.Update(client);
@@ -376,49 +366,6 @@ namespace InteractHealthProDatabase.Controllers
         {
             return (_context.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
-
-        
-        public IActionResult ArchiveClient()
-{
-    var inactiveClients = _context.Clients.Where(c => c.Status == "Inactive").ToList();
-    return View(inactiveClients);
-
-}
-
-// POST: Client/SetInactive/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetInactive(int id)
-        {
-            try
-            {
-                var client = await _context.Clients.FindAsync(id);
-                if (client == null)
-                {
-                    return NotFound();
-                }
-
-                client.Status = "Inactive";
-                await _context.SaveChangesAsync();
-
-                TempData["NotifyClassName"] = "success";
-                TempData["NotifyMsg"] = "Client status set to Inactive successfully.";
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                TempData["NotifyClassName"] = "danger";
-                TempData["NotifyMsg"] = "An error occurred while setting the client status to Inactive.";
-
-                return RedirectToAction(nameof(Index));
-            }
-        }
-
-
-
 
         //===================================== Download OCF Forms ========================================//
 
@@ -587,7 +534,6 @@ namespace InteractHealthProDatabase.Controllers
 
 
 
-
                         // Repeat for each field...
 
                         form.FlattenFields();
@@ -636,7 +582,6 @@ namespace InteractHealthProDatabase.Controllers
 
             return File(filledPdfBytes, "application/pdf", fileName);
         }
-
 
         // Install OCF-1
         public async Task<IActionResult> DownloadOCF1(int? id)
