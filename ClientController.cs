@@ -162,7 +162,9 @@ namespace InteractHealthProDatabase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateOrEdit(int? id, [Bind("Id,ClientMVA,Appointments,HealthFile,Pet,Dependent,InsuranceClaim，Referral,ContactName,Email,CellPhone,Telephone,Fax,Address,City,Region,Country,PostalCode,Status")] Client client)
+
+        public async Task<IActionResult> CreateOrEdit(int? id, [Bind("Id,ClientMVA,Appointments,HealthFile,Pet,Dependent,InsuranceClaim,Referral,ReferralDate,DateOfLoss,ContactName,Email,CellPhone,Telephone,Fax,Address,City,Region,Country,PostalCode,Status")] Client client)
+
         {
             // In the Bind annotation above, we have to include the children models, otherwise they will not be included
 
@@ -202,7 +204,9 @@ namespace InteractHealthProDatabase.Controllers
                 }
                 else
                 {
+
                     client.Status ??= "Active"; 
+
                     _context.Add(client);
 
                     // We have to set the client of the children models, otherwise it will be null
@@ -274,7 +278,9 @@ namespace InteractHealthProDatabase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Edit(int id, [Bind("Id, Pet,Dependent,ClientMVA,Referral,ContactName,Email,CellPhone,Telephone,Fax,Address,City,Region,Country,PostalCode,Status")] Client client)
+
         {
             if (id != client.Id)
             {
@@ -283,7 +289,9 @@ namespace InteractHealthProDatabase.Controllers
             Console.WriteLine("Running line 64");
             if (ModelState.IsValid)
             {
+
                 client.Status ??= "Active";
+
                 try
                 {
                     _context.Update(client);
@@ -369,6 +377,7 @@ namespace InteractHealthProDatabase.Controllers
             return (_context.Clients?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
+
         
         public IActionResult ArchiveClient()
 {
@@ -407,6 +416,7 @@ namespace InteractHealthProDatabase.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
 
 
 
@@ -540,6 +550,42 @@ namespace InteractHealthProDatabase.Controllers
                             insuranceCompanyAddressField.SetValue(insuranceClaim?.InsuranceCompany?.Address ?? "");
                         }
 
+                        //Insurance Region
+                        var insuranceCompanyRegionField = form.GetField("InsuranceProvince");
+                        if(insuranceCompanyRegionField != null)
+                        {
+                            var insuranceCompanyContact = insuranceClaim?.InsuranceCompany?.InsuranceCompanyContacts.FirstOrDefault();
+
+                            insuranceCompanyRegionField.SetValue(insuranceCompanyContact?.Region);
+
+                        }
+
+                        //Insurance City
+                        var insuranceCompanyCityField = form.GetField("InsuranceCity");
+                        if (insuranceCompanyCityField != null)
+                        {
+                            var insuranceCompanyContact = insuranceClaim?.InsuranceCompany?.InsuranceCompanyContacts.FirstOrDefault();
+                            
+                            insuranceCompanyCityField.SetValue(insuranceCompanyContact?.City);
+
+                        }
+
+                        //Insurace Claim holder name
+                        var insuranceClaimHolderNameField = form.GetField("NameOfPolicyholder");
+                        if (insuranceClaimHolderNameField != null)
+                        {
+                            insuranceClaimHolderNameField.SetValue(client.ContactName);
+                        }
+
+                        // Insurance Claim Number
+                        var insurancePolicyNumberField = form.GetField("InsurancePolicyNumber");
+                        if(insurancePolicyNumberField != null)
+                        {
+                            insurancePolicyNumberField.SetValue(insuranceClaim.Claimref);
+                        }
+
+
+
 
 
                         // Repeat for each field...
@@ -589,6 +635,13 @@ namespace InteractHealthProDatabase.Controllers
             var fileName = $"{client.ContactName}_{currentDate}_{formName}.pdf";
 
             return File(filledPdfBytes, "application/pdf", fileName);
+        }
+
+
+        // Install OCF-1
+        public async Task<IActionResult> DownloadOCF1(int? id)
+        {
+            return await DownloadOCF(id, "Forms/OCF-1.pdf", "OCF-1");
         }
 
         // Install OCF-2
