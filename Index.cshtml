@@ -8,11 +8,18 @@
 <h1>All Clients</h1>
 
 <p>
-    <a asp-action="CreateOrEdit" class="btn btn-primary customColorDarkBlue btn-sm col-auto mx-2">Add New Client</a>
-</p>
+  <a asp-action="CreateOrEdit" class="btn btn-primary customColorDarkBlue btn-sm col-auto mx-2">Add New Client</a>
 
+  
+  <a asp-action="ArchiveClient" asp-controller="Client" class="btn btn-primary customColorDarkBlue btn-sm col-auto mx-2">View Archived Clients</a>
+
+  
 <button id="toggleTableButton" class="btn btn-primary customColorDarkBlue mb-3">Table View</button>
 <button id="toggleCardButton" class="btn btn-primary customColorDarkBlue mb-3">Card View</button>
+
+
+</p>
+
 
 
 <!-- Search input field -->
@@ -21,6 +28,9 @@
         <input type="text" id="search" placeholder="Search by info" class="form-control" />
     </div>
 </div>
+
+
+
 
 <!-- Table displaying client information -->
 <div id="tableView">
@@ -72,6 +82,7 @@
                             <strong>@Html.DisplayNameFor(model => model.DateOfLoss)</strong>
                         </div>
                         <div class="col px-2">
+
                             <strong>Action Buttons:</strong>
                         </div>
                     </div>
@@ -79,12 +90,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+
+             @foreach (var item in Model.Where(client => client.Status == "Active"))
             {
                 <tr>
                     <td colspan="7" style="border: none;">
                         <div>
                             <div>
+
                                 <div class="row">
                                     <div class="col px-2">
                                         @Html.DisplayFor(modelItem => item.Id)
@@ -129,7 +142,21 @@
                                         @Html.DisplayFor(modelItem => item.DateOfLoss)
                                     </div>
                                     <div class="col px-2">
-                                        @await Html.PartialAsync("_ActionButtonsPartial", item.Id)
+
+                                        <!-- Action Buttons -->
+                                    <div class="btn-group" role="group" aria-label="Toolbar with button groups to edit, get details or to set status">
+                                        <a asp-action="CreateOrEdit" asp-route-id="@item.Id" class="btn btn-warning customColorWarning" aria-label="Edit" title="Edit" data-toggle="tooltip" data-placement="top">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info customColorInfo" aria-label="Details" title="Details" data-toggle="tooltip" data-placement="top">
+                                            <i class="fa-solid fa-info"></i>
+                                        </a>
+                                        <button onclick="setInactive('@item.Id')" class="btn btn-danger customColorDanger" aria-label="Set Inactive" title="Set Inactive" data-toggle="tooltip" data-placement="top">
+                                            <i class="fa-regular fa-ban"></i>
+                                        </button>
+                                    </div>
+                        <!-- End of Action Buttons -->
+
                                     </div>
                                 </div>
                             </div>
@@ -138,41 +165,60 @@
                 </tr>
             }
         </tbody>
+
+                          
   </table>
 </div> 
 
-    <div id="cardView" style="margin-top: 20px;">
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.ContactName)</h5>
-                            <p class="card-text"><strong>ID:</strong> @Html.DisplayFor(modelItem => item.Id)</p>
-                            <p class="card-text"><strong>Email:</strong> @Html.DisplayFor(modelItem => item.Email)</p>
-                            <p class="card-text"><strong>Cell Phone:</strong> @Html.DisplayFor(modelItem => item.CellPhone)</p>
-                            <p class="card-text"><strong>Telephone:</strong> @Html.DisplayFor(modelItem => item.Telephone)</p>
-                            <p class="card-text"><strong>Fax:</strong> @Html.DisplayFor(modelItem => item.Fax)</p>
-                            <p class="card-text"><strong>Address:</strong> @Html.DisplayFor(modelItem => item.Address)</p>
-                            <p class="card-text"><strong>City:</strong> @Html.DisplayFor(modelItem => item.City)</p>
-                            <p class="card-text"><strong>Region:</strong> @Html.DisplayFor(modelItem => item.Region)</p>
-                            <p class="card-text"><strong>Country:</strong> @Html.DisplayFor(modelItem => item.Country)</p>
-                            <p class="card-text"><strong>Postal Code:</strong> @Html.DisplayFor(modelItem => item.PostalCode)</p>
-                            <div>
-                                @await Html.PartialAsync("_ActionButtonsPartial", item.Id)
-                            </div>
+
+
+  
+  
+  <div id="cardView" style=" display: none; margin-top: 20px;">
+    <div class="row">
+        @foreach (var item in Model.Where(client => client.Status == "Active"))
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ContactName)</h5>
+                        <p class="card-text"><strong>ID:</strong> @Html.DisplayFor(modelItem => item.Id)</p>
+                        <p class="card-text"><strong>Email:</strong> @Html.DisplayFor(modelItem => item.Email)</p>
+                        <p class="card-text"><strong>Cell Phone:</strong> @Html.DisplayFor(modelItem => item.CellPhone)</p>
+                        <p class="card-text"><strong>Telephone:</strong> @Html.DisplayFor(modelItem => item.Telephone)</p>
+                        <p class="card-text"><strong>Fax:</strong> @Html.DisplayFor(modelItem => item.Fax)</p>
+                        <p class="card-text"><strong>Address:</strong> @Html.DisplayFor(modelItem => item.Address)</p>
+                        <p class="card-text"><strong>City:</strong> @Html.DisplayFor(modelItem => item.City)</p>
+                        <p class="card-text"><strong>Region:</strong> @Html.DisplayFor(modelItem => item.Region)</p>
+                        <p class="card-text"><strong>Country:</strong> @Html.DisplayFor(modelItem => item.Country)</p>
+                        <p class="card-text"><strong>Postal Code:</strong> @Html.DisplayFor(modelItem => item.PostalCode)</p>
+                        <div>
+                            <!-- Action Buttons -->
+                        <div class="btn-group" role="group" aria-label="Toolbar with button groups to edit, get details or to set status">
+                            <a asp-action="CreateOrEdit" asp-route-id="@item.Id" class="btn btn-warning customColorWarning" aria-label="Edit" title="Edit" data-toggle="tooltip" data-placement="top">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info customColorInfo" aria-label="Details" title="Details" data-toggle="tooltip" data-placement="top">
+                                <i class="fa-solid fa-info"></i>
+                            </a>
+                            <button onclick="setInactive('@item.Id')" class="btn btn-danger customColorDanger" aria-label="Set Inactive" title="Set Inactive" data-toggle="tooltip" data-placement="top">
+                                <i class="fa-regular fa-ban"></i>
+                            </button>
+                        </div>
+                        <!-- End of Action Buttons -->
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
+</div>
 
 
 
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 
 
 <!-- JavaScript to toggle views -->
@@ -197,4 +243,45 @@
 
         toggleTableView();
     });
+
 </script>
+  
+  
+<!-- JavaScript for setting client status to inactive -->
+<script>
+    function setInactive(id) {
+    if (confirm("Are you sure you want to set the client status to inactive?")) {
+        let token = $('input[name="__RequestVerificationToken"]').val();   // AntiForgeryToken
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("SetInactive")",
+            data: {
+                __RequestVerificationToken: token,
+                id: id
+            },
+            success: function (response) {
+                if (response.result === true) {
+                    console.log("Client ID=" + id + " status set to inactive successfully");
+                    // Set notification message after successful status update
+                    var notifyMsg = "Client ID=" + id + " status set to inactive successfully";
+                    // Display toastr notification
+                    toastr.success(notifyMsg);
+                    // Reload the page after a short delay
+                    setTimeout(function () {
+                        location.reload(true);
+                    }, 500);
+                } else {
+                    console.log("Error in setting client status to inactive");
+                }
+            },
+            complete: function () {
+                // If the request is complete, regardless of success or failure, reload the page after a short delay
+                setTimeout(function () {
+                    location.reload(true);
+                }, 500);
+            }
+        });
+    }
+}
+
+</script>  
