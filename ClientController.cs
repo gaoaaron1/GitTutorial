@@ -88,7 +88,17 @@ namespace InteractHealthProDatabase.Controllers
 
             //client.InsuranceClaim = await _context.InsuranceClaims.Where(ic => ic.Client.Id == id).FirstOrDefaultAsync();
 
-            client.Dependent = await _context.Dependent.Where(cdep => cdep.Client.Id == id).FirstOrDefaultAsync();
+            var dependent = await _context.Dependent.Where(cdep => cdep.Client.Id == id).FirstOrDefaultAsync();
+
+            if (dependent != null)
+            {
+                client.Dependent = dependent;
+            }
+            else
+            {
+
+                client.Dependent = new Dependent(); 
+            }
 
             client.Pet = await _context.Pet.Where(cpet => cpet.Client.Id == id).FirstOrDefaultAsync();
 
